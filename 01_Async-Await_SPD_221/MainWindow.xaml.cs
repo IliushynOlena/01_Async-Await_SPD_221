@@ -49,10 +49,6 @@ namespace _01_Async_Await_SPD_221
             //listBox.Items.Add(value);
             listBox.Items.Add(await GenerateValueAsync());
            // GenerateValueAsync();
-           File.Wri
-
-
-
         }
 
         int GenerateValue()

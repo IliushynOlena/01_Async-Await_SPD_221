@@ -1,0 +1,46 @@
+﻿<Window x:Class="_02_flie_copy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_02_flie_copy"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Padding" Value="5"></Setter>            
+        </Style>
+        <Style x:Key="pathTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            <Setter Property="IsReadOnly" Value="true"></Setter>            
+        </Style>
+    </Window.Resources>
+    <DockPanel LastChildFill="False">
+     <Grid Margin="7" DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label HorizontalContentAlignment="Right">From :</Label>
+        <TextBox x:Name="sourseTBox" Style="{StaticResource pathTextBox}"  Grid.Row="0" Grid.Column="1"></TextBox>
+        <Button  Click="OpenSourceBtnClick" Grid.Column="2">Browse</Button>
+
+        <Label HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0">To :</Label>
+            <TextBox x:Name="destTBox" Style="{StaticResource pathTextBox}" Grid.Row="1" Grid.Column="1"></TextBox>
+        <Button Click="OpenDestBtn_Click" Grid.Row="1" Grid.Column="2">Browse</Button>
+
+        <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" 
+                Padding="10" Click="Copy_Button_ClickAsync">Copy</Button>
+    </Grid>
+     <ProgressBar x:Name="progressBar" DockPanel.Dock="Bottom" Value="0" Height="30" ></ProgressBar>
+    </DockPanel>
+</Window>

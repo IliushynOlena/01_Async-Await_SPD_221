@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_Async-Await_SPD_221", "01_Async-Await_SPD_221\01_Async-Await_SPD_221.csproj", "{42591EDC-7855-47DA-AA0A-1D3E78FAE101}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_Async-Await_SPD_221", "01_Async-Await_SPD_221\01_Async-Await_SPD_221.csproj", "{42591EDC-7855-47DA-AA0A-1D3E78FAE101}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_flie_copy", "02_flie_copy\02_flie_copy.csproj", "{0BDB4D6F-4686-4C77-A5B9-11B1831BE68B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{42591EDC-7855-47DA-AA0A-1D3E78FAE101}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42591EDC-7855-47DA-AA0A-1D3E78FAE101}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42591EDC-7855-47DA-AA0A-1D3E78FAE101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BDB4D6F-4686-4C77-A5B9-11B1831BE68B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BDB4D6F-4686-4C77-A5B9-11B1831BE68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BDB4D6F-4686-4C77-A5B9-11B1831BE68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BDB4D6F-4686-4C77-A5B9-11B1831BE68B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
