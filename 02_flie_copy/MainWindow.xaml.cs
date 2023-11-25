@@ -1,6 +1,9 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using IOExtensions;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Security;
@@ -23,27 +26,40 @@ namespace _02_flie_copy
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string Sourse { get; set; }
-        public string Destination { get; set; }
+        ViewModel model; 
         public MainWindow()
         {
             InitializeComponent();
-            sourseTBox.Text = Sourse = @"C:\Users\helen\Downloads\Wpf.Mvvm.Evolution.Final.zip";
-            destTBox.Text = Destination = @"C:\Users\helen\Desktop\Test - Copy";
-
+            model = new ViewModel()
+            {
+                Sourse = @"C:\Users\helen\Downloads\1GB.bin",
+                Destination = @"C:\Users\helen\Desktop\Testtt",
+                Progress = 0
+            };
+            this.DataContext = model;
         }
 
         private async void Copy_Button_ClickAsync(object sender, RoutedEventArgs e)
         {
-            string filename = Path.GetFileName(sourseTBox.Text);
-            string destinationPath = Path.Combine(Destination, filename);
-            await CopyFileAsync(Sourse, destinationPath);
-            Console.WriteLine("Complited!!!");
+            string filename = Path.GetFileName(model.Sourse);
+            string destinationPath = Path.Combine(model.Destination, filename);
+            //add item to list
+            CopyFileInfo copyFileInfo = new CopyFileInfo()
+            {
+                FileName = filename,
+                Percentage = 0,
+                BytesPerSecond = 0
+            };
+
+            model.AddProcess(copyFileInfo);
+            await CopyFileAsync(model.Sourse, destinationPath, copyFileInfo);
+            copyFileInfo.Percentage = 100;
+
+           MessageBox.Show("Complited!!!");
 
 
         }//}//destStream.Dispose(); //}//srcStream.Dispose();  
-
-        private Task CopyFileAsync(string src, string dest)
+        private Task CopyFileAsync(string src, string dest, CopyFileInfo copyFileInfo)
         {
             return Task.Run(() =>
             {
@@ -51,8 +67,9 @@ namespace _02_flie_copy
                 //File.Copy(Sourse, destinationPath, true);
                 //MessageBox.Show("Complited!!!");
 
+                /*
                 //2 - using FileStream
-                using FileStream srcStream = new FileStream(Sourse, FileMode.Open, FileAccess.Read);
+                using FileStream srcStream = new FileStream(model.Sourse, FileMode.Open, FileAccess.Read);
                 using FileStream destStream = new FileStream(dest, FileMode.Create, FileAccess.Write);
 
                 byte[] buffer = new byte[1024 * 8];//8Kb
@@ -62,9 +79,17 @@ namespace _02_flie_copy
                     bytes = srcStream.Read(buffer, 0, buffer.Length);
                     destStream.Write(buffer, 0, bytes);
                     float procent = destStream.Length / (srcStream.Length / 100);
-                    progressBar.Value = procent;
+                    model.Progress = procent;
+                    //MessageBox.Show(model.Progress.ToString());
 
                 } while (bytes > 0);
+                */
+                return FileTransferManager.CopyWithProgressAsync(src, dest, (progress) =>
+                {
+                    //model.Progress = progress.Percentage;
+                    copyFileInfo.Percentage = progress.Percentage;
+                    copyFileInfo.BytesPerSecond = progress.BytesPerSecond;//Mb/s
+                }, false);
             });
 
         }
@@ -73,9 +98,7 @@ namespace _02_flie_copy
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             if( dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Sourse = dialog.FileName;
-                sourseTBox.Text = Sourse;
-                //MessageBox.Show(Sourse);
+                model.Sourse = dialog.FileName;
             }
         }
 
@@ -85,12 +108,39 @@ namespace _02_flie_copy
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Destination = dialog.FileName;
-                destTBox.Text = Destination;
-                //MessageBox.Show(Destination);
+                model.Destination = dialog.FileName;
             }
         }
 
+
+    }
+    [AddINotifyPropertyChangedInterface]
+    class ViewModel
+    {
+        public string Sourse { get; set; }
+        public string Destination { get; set; }
+        public double Progress { get; set; }
+        public bool IsWaiting => Progress == 0;
+        private ObservableCollection<CopyFileInfo> files;
+        public IEnumerable<CopyFileInfo> Files => files;//read only
+        public ViewModel()
+        {
+            files = new ObservableCollection<CopyFileInfo>();
+        }
+        public void AddProcess(CopyFileInfo info)
+        {
+            files.Add(info);
+        }
+
+    }
+    [AddINotifyPropertyChangedInterface]
+    class CopyFileInfo
+    {
+        public string FileName { get; set; }
+        public double Percentage { get; set; }
+        public int PercentageInt => (int)Percentage;
+        public double BytesPerSecond { get; set; }
+        public double MegaBytesPerSecond => Math.Round(BytesPerSecond / 1024 / 1024, 1);
 
     }
 }
