@@ -5,13 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_02_flie_copy"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        >
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}">
             <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="Padding" Value="5"></Setter>            
+            <Setter Property="Padding" Value="10"></Setter>            
+            <Setter Property="Height" Value="40"></Setter>            
+          
         </Style>
-        <Style x:Key="pathTextBox" TargetType="{x:Type TextBox}">
+        <Style x:Key="pathTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
             <Setter Property="IsReadOnly" Value="true"></Setter>            
@@ -31,37 +43,48 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Label HorizontalContentAlignment="Right">From :</Label>
-            <TextBox Text="{Binding Sourse}"  Style="{StaticResource pathTextBox}"  Grid.Row="0" Grid.Column="1"></TextBox>
+            <TextBox Text="{Binding Sourse}"  Grid.Row="0" Grid.Column="1"
+                     Style="{StaticResource pathTextBox}"></TextBox>
         <Button  Click="OpenSourceBtnClick" Grid.Column="2">Browse</Button>
 
         <Label HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0">To :</Label>
-            <TextBox Text="{Binding Destination}" Style="{StaticResource pathTextBox}" Grid.Row="1" Grid.Column="1"></TextBox>
+            <TextBox Text="{Binding Destination}"  Grid.Row="1" Grid.Column="1"
+                      Style="{StaticResource pathTextBox}"></TextBox>
         <Button Click="OpenDestBtn_Click" Grid.Row="1" Grid.Column="2">Browse</Button>
 
         <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" 
-                Padding="10" Click="Copy_Button_ClickAsync">Copy</Button>
+                Click="Copy_Button_ClickAsync">Copy</Button>
     </Grid>
         <ProgressBar DockPanel.Dock="Bottom" Value="{Binding Progress}" 
                      Height="30" IsIndeterminate="{ Binding IsWaiting}" ></ProgressBar>
-        <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Files}">
+        <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Files}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <ListBoxItem>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100" MaxWidth="300"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto" MaxWidth="200"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto" MaxWidth="100"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Margin="10" Text="{Binding FileName}"
+                       <materialDesign:Card
+                                  Background="{DynamicResource PrimaryHueDarkBrush}"
+                                  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                  Padding="8"
+                                  UniformCornerRadius="6">
+                        <ListBoxItem>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" MaxWidth="300"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto" MaxWidth="200"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto" MaxWidth="100"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Margin="10" Text="{Binding FileName}"
                                        TextTrimming="CharacterEllipsis"
                                        FontWeight="Bold"></TextBlock>
-                            <TextBlock  Margin="10" Grid.Column="1" >Speed : <Run Text="{Binding MegaBytesPerSecond, Mode=OneWay}"></Run> Mb/s</TextBlock>
-                            <TextBlock  Margin="10" Grid.Column="3" > <Run Text="{ Binding PercentageInt , Mode=OneWay}"></Run>  %</TextBlock>
-                            <ProgressBar Grid.Column="2" Height="10" Margin="4" Value="{Binding PercentageInt , Mode=OneWay}"></ProgressBar>
-                        </Grid>
-                    </ListBoxItem>
+                                <TextBlock  Margin="10" Grid.Column="1" >Speed : <Run Text="{Binding MegaBytesPerSecond, Mode=OneWay}"></Run> Mb/s</TextBlock>
+                                <TextBlock  Margin="10" Grid.Column="3" > <Run Text="{ Binding PercentageInt , Mode=OneWay}"></Run>  %</TextBlock>
+                                <ProgressBar Grid.Column="2" Height="10" Margin="4" Value="{Binding PercentageInt , Mode=OneWay}"
+                                             Foreground="{StaticResource PrimaryHueMidBrush}"></ProgressBar>
+                            </Grid>
+                        </ListBoxItem>
+                           
+                    </materialDesign:Card>                    
                 </DataTemplate>
             </ListBox.ItemTemplate>
 
